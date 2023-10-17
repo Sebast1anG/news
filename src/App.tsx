@@ -84,7 +84,7 @@ const App = () => {
           try {
               const languageQueryString = languages.map(lang => `language=${lang}`).join('&')
               const response = await axios.get(
-                  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}&pageSize=${ARTICLES_PER_PAGE}&page=${pageNumber}`
+                  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}&pageSize=${ARTICLES_PER_PAGE}&page=${pageNumber}&sortBy=popularity&${languageQueryString}`
               )
 
                   return response.data.articles
@@ -169,20 +169,49 @@ const App = () => {
       <div>
          <Navbar />
           <div>
-          <p>Filters</p>
+              <h3>Filters</h3>
+          <div
+             style={{
+                      border: '5px solid #ccc',
+                      borderRadius: '5px',
+                      padding:'8px',
+                      width: 'fit-content'
+             }}>
               <input
                   type="text"
+                  style={{
+                      marginRight: '10px',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      fontSize: '14px',
+                      outline: 'none',
+                  }}
                   placeholder="Filter by date (mm-yyyy)"
                   value={dateFilter}
-                  onChange={(e) => setDateFilter(e.target.value)}
+                  onChange={(e) => {
+                      const inputText = e.target.value;
+                      if (/^\d*-*\d*$/.test(inputText) || inputText === '') {
+                          setDateFilter(inputText);
+                      }
+                  }}
               />
               <input
                   type="text"
+                  style={{
+                      marginRight: '10px',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      fontSize: '14px',
+                      outline: 'none',
+                      marginLeft: '10px'
+                  }}
                   placeholder="Filter by source"
                   value={sourceFilter}
                   onChange={(e) => setSourceFilter(e.target.value)}
               />
-              <label>
+                  <label style={{ marginRight: '10px', marginLeft: '10px' }}>
                   Select a language:
                   <select value={selectedLanguages[0]} onChange={handleLanguageChange}>
                       {languages.map((language) => (
@@ -199,7 +228,8 @@ const App = () => {
                       checked={sortByPopularity}
                       onChange={handleSortByChange}
                   />
-              </label>
+                  </label>
+              </div>
               {loading ? (
                   <p>Loading data...</p>
               ) : filteredArticles.length === 0 ? (
@@ -216,7 +246,16 @@ const App = () => {
                               <td>{article.title}</td>
                               <td>{formatMonthYearDate(article.publishedAt)}</td>
                               <td>
-                                  <button onClick={() => openModal(article)}>See more</button>
+                                  <button
+                                      style={{
+                                          backgroundColor: '#007BFF',
+                                          color: '#fff',
+                                          padding: '5px 10px',
+                                          border: 'none',
+                                          borderRadius: '4px',
+                                          cursor: 'pointer'
+                                      }}
+                                      onClick={() => openModal(article)}>See more</button>
                               </td>
                           </tr>
                       ))}
@@ -274,6 +313,13 @@ const App = () => {
           </div>
           <input
               type="text"
+              style={{
+                  padding: '8px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  fontSize: '14px',
+                  outline: 'none',
+              }}
               placeholder="Search articles"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -283,7 +329,17 @@ const App = () => {
                   }
               }}
           />
-          <button onClick={handleSearch}>Search</button>
+          <button
+              style={{
+                  backgroundColor: '#007BFF',
+                  color: '#fff', 
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '4px', 
+                  cursor: 'pointer'
+              }}
+              onClick={handleSearch}>Search
+          </button>
           {sortByPopularity ? (
               <div>
           <p>Sorted by popularity</p>

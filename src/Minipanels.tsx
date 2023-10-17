@@ -7,7 +7,7 @@ const MiniPanels = () => {
     const [countryCounts, setCountryCounts] = useState<{ [key: string]: number }>({})
     const [hoveredPanel, setHoveredPanel] = useState<string | null>(null);
 
-    const apiKey = '0df8f21b3c4848adb5f8157f083c8ed7';
+    const apiKey = '0df8f21b3c4848adb5f8157f083c8ed7s';
     const container: React.CSSProperties = {
         display: 'flex',
         margin: '0 auto',
